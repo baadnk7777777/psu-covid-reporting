@@ -16,7 +16,7 @@ export const studentForm = () => {
 
     const router = useRouter();
 
-    const user = router.query.psuPassport || "";
+    const user = router.query.psuPassport;
 
 
 
@@ -51,7 +51,7 @@ export const studentForm = () => {
             console.log(formattedDate); // Output: "28/02/2023"
 
 
-            const databaseRef2 = databaseRef(getDatabase(app), 'student_report/s6330613005');
+            const databaseRef2 = databaseRef(getDatabase(app), `student_report/${user}`);
             const newReportRef = push(databaseRef2);
 
 
@@ -64,7 +64,7 @@ export const studentForm = () => {
             console.log("Create Report Working function.")
 
             const name = imagesFile.name;
-            const storeRef = storageRef(storage, `images/s6330613005/${name}`);
+            const storeRef = storageRef(storage, `images/${user}/${name}`);
             const uploadTask = uploadBytesResumable(storeRef, imagesFile);
 
             uploadTask.on('state_changed',
@@ -101,28 +101,30 @@ export const studentForm = () => {
         }
     }
 
+
+
+    useEffect(() => {
+
+    })
+
     if (user == "") {
         router.push("/");
     }
 
-    useEffect(() => {
-        console.log(user);
-    })
-
     return (
-        <div className=" h-screen flex justify-center items-center container px-4 mx-auto">
-            <div className="">
-                <div className="w-full mt-4">
+        <div className=" h-screen flex justify-center items-center container px-4 mx-auto w-full">
+            <div className="rounded-2xl border border-2-black w-1/2 px-4 py-4 shadow-lg">
+                <div className="w-full">
                     <DatePicker placeholderText='Choose Date' className=' w-full font-work_sans px-2 py-2  border border-gray-300 text-gray-900  rounded-lg'
                         selected={selectedDate}
                         onChange={(date: Date | null) => setSelectedDate(date)}
                     />
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 ">
 
                     <select onChange={(event) => setCovidStatus(event.target.value)} className=' font-work_sans px-2 py-2  border border-gray-300 text-gray-900  rounded-lg w-full' id="">
-                        <option value="">Choose a covid status</option>
+                        <option className='font-work_sans' value="">Choose a covid status</option>
                         <option value="Positive">Positive</option>
                         <option value="Negative">Negative</option>
                     </select>
