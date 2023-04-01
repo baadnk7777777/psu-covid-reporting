@@ -1,17 +1,24 @@
 import { storage } from '@/firebaseConfig';
 import { getDownloadURL, ref as storageRef, uploadBytesResumable } from 'firebase/storage';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import firebase from 'firebase/app';
 
 import { getDatabase, set, ref as databaseRef, ref, push } from "firebase/database";
 import app from '@/utils/firebase';
+import { useRouter } from 'next/router';
 
 export const studentForm = () => {
     const [imagesFile, setImagesFile] = useState<File>();
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [covidStatus, setCovidStatus] = useState("");
+
+    const router = useRouter();
+
+    const user = router.query.psuPassport || "";
+
+
 
     const handleSelectFile = (file: any) => {
         if (file[0].size < 1000000) {
@@ -93,6 +100,14 @@ export const studentForm = () => {
             console.log("File not found!!!");
         }
     }
+
+    if (user == "") {
+        router.push("/");
+    }
+
+    useEffect(() => {
+        console.log(user);
+    })
 
     return (
         <div className=" h-screen flex justify-center items-center container px-4 mx-auto">
