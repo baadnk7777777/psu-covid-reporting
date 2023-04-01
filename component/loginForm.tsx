@@ -42,10 +42,10 @@ export const loginForm = () => {
         for (var i = 0; i < user.length; i++) {
             if (psuPassport == user[i].psupassport) {
                 if (password == user[i].password) {
-
+                    const role = user[i].role
                     router.push({
                         pathname: '/studentForm',
-                        query: { psuPassport }
+                        query: { psuPassport, role }
                     });
                 }
             }

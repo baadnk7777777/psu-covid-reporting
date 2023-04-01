@@ -17,7 +17,7 @@ export const studentForm = () => {
     const router = useRouter();
 
     const user = router.query.psuPassport;
-
+    const role = router.query.role;
 
 
     const handleSelectFile = (file: any) => {
@@ -51,14 +51,15 @@ export const studentForm = () => {
             console.log(formattedDate); // Output: "28/02/2023"
 
 
-            const databaseRef2 = databaseRef(getDatabase(app), `student_report/${user}`);
+            const databaseRef2 = databaseRef(getDatabase(app), `student_report/`);
             const newReportRef = push(databaseRef2);
 
 
             await set(newReportRef, {
                 status: covidStatus,
                 images_name: imagesFile.name,
-                timestamp: formattedDate
+                timestamp: formattedDate,
+                psupassport: user,
             });
 
             console.log("Create Report Working function.")
@@ -111,6 +112,15 @@ export const studentForm = () => {
         router.push("/");
     }
 
+    const handleDashboard = () => {
+
+        router.push({
+            pathname: '/dashboard',
+            query: { user, role }
+        });
+
+    }
+
     return (
         <div className=" h-screen flex justify-center items-center container px-4 mx-auto w-full">
             <div className="rounded-2xl border border-2-black w-1/2 px-4 py-4 shadow-lg">
@@ -142,6 +152,9 @@ export const studentForm = () => {
                 <button className='font-work_sans bg-[#009CDE] px-2 py-3 text-white font-bold rounded-2xl w-full'
                     onClick={handleUploadFile}
                 >Submit</button>
+            </div>
+            <div className="flex flex-col">
+                <button onClick={() => handleDashboard()}>Dashboard</button>
             </div>
         </div>
     )
