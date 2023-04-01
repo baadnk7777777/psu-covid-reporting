@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 
 import ReportC from "../component/report";
 
-export const dashboard = () => {
+export const Dashboard = () => {
 
     type Report = {
         psupassport: string;
@@ -56,11 +56,11 @@ export const dashboard = () => {
                 </tr>
             </thead>
             <tbody>
-                {reportList ? reportList.map((item) => <ReportC report={item} />) : ""}
+                {/* {reportList ? reportList.map((item) => <ReportC report={item} />) : ""} */}
 
             </tbody>
         </table >
     )
 }
 
-export default dashboard;
+export default Dashboard;

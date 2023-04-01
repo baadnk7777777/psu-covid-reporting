@@ -9,7 +9,7 @@ import { getDatabase, set, ref as databaseRef, ref, push } from "firebase/databa
 import app from '@/utils/firebase';
 import { useRouter } from 'next/router';
 
-export const studentForm = () => {
+export const StudentForm = () => {
     const [imagesFile, setImagesFile] = useState<File>();
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [covidStatus, setCovidStatus] = useState("");
@@ -160,4 +160,4 @@ export const studentForm = () => {
     )
 }
 
-export default studentForm
+export default StudentForm

@@ -2,7 +2,7 @@ import { storage } from '@/firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import React, { useState } from 'react'
 
-export const upload = () => {
+export const Upload = () => {
 
     const [imagesFile, setImagesFile] = useState<File>();
 
@@ -70,4 +70,4 @@ export const upload = () => {
     )
 }
 
-export default upload
+export default Upload

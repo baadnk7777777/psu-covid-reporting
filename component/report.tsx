@@ -8,7 +8,7 @@ type ReportProps = {
         timestamp: string;
     }
 }
-export const report: React.FC<ReportProps> = ({ report }) => {
+export const Report: React.FC<ReportProps> = ({ report }) => {
     return (
         <div className=" w-full text-center py-2 border-2 border-b-gray-500">
             <div className="flex gap-4">
@@ -20,4 +20,4 @@ export const report: React.FC<ReportProps> = ({ report }) => {
         </div>
     )
 }
-export default report
+export default Report

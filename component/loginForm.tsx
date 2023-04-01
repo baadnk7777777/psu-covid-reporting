@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { getDatabase, onValue, ref } from 'firebase/database'
 import app from '@/utils/firebase'
 
-export const loginForm = () => {
+export const LoginForm = () => {
 
     type User = {
         psupassport: string;
@@ -85,4 +85,4 @@ export const loginForm = () => {
     )
 }
 
-export default loginForm
+export default LoginForm
