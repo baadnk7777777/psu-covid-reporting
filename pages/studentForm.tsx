@@ -153,9 +153,7 @@ export const StudentForm = () => {
                     onClick={handleUploadFile}
                 >Submit</button>
             </div>
-            <div className="flex flex-col">
-                <button onClick={() => handleDashboard()}>Dashboard</button>
-            </div>
+
         </div>
     )
 }

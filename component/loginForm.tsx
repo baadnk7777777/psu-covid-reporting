@@ -55,16 +55,17 @@ export const LoginForm = () => {
     }
     const router = useRouter();
     return (
+
         <div className="flex flex-col-2 w-full rounded-2xl border border-2-black ">
 
             <div className=" bg-[#009CDE] w-1/2 rounded-l-2xl"></div>
 
-            <div className=" px-10 py-10 flex flex-col w-1/2 justify-center items-center ">
-                <div className="w-40">
-                    <Image src={psu_logo} alt="Logo" />
+            <div className="px-10 py-10 flex flex-col w-1/2 justify-center items-center ">
+                <div className="">
+                    <Image className='' width={160} src={psu_logo} alt="Logo" />
                 </div>
 
-                <div className=" w-ful items-center">
+                <div className="w-ful items-center">
                     <p className=' font-work_sans font-bold mt-10 text-center'>PSU COVID REPORT</p>
                     <p className=' font-work_sans font-light text-gray-500 text-sm mb-10'>This website for get covid report from PSU students</p>
                 </div>
