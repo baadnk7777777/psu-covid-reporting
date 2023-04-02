@@ -24,6 +24,7 @@ export const Dashboard = () => {
     const user = router.query.user;
     const role = router.query.role;
 
+
     useEffect(() => {
 
         const database = getDatabase(app);
@@ -53,20 +54,7 @@ export const Dashboard = () => {
 
         sortData();
 
-        const fetchImages = async () => {
 
-            let result = await storageRef.child('images').listAll();
-            let urlPromises = result.items.map(imageRef => imageRef.getDownloadURL());
-
-            return Promise.all(urlPromises);
-
-        }
-
-        const loadImages = async () => {
-            const urls = await fetchImages();
-            setFiles(urls);
-        }
-        loadImages();
 
     }, [])
 
