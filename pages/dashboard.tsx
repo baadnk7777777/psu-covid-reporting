@@ -104,8 +104,8 @@ export const Dashboard = () => {
                         </thead>
                         <tbody>
                             {
-                                reportList.map((items) => (
-                                    <tr className='hover:bg-gray-50 font-bold'>
+                                reportList.map((items, index) => (
+                                    <tr key={index} className='hover:bg-gray-50 font-bold'>
 
                                         <td className='px-6 py-4'>
                                             {items.timestamp}
