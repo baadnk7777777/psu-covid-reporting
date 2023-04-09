@@ -2,11 +2,23 @@ import app from '@/utils/firebase';
 import { getDatabase, onValue, ref } from 'firebase/database';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { getDownloadURL, ref as storageRef, uploadBytesResumable } from 'firebase/storage';
+import { getStorage, getDownloadURL, ref as storageRef, uploadBytesResumable, listAll } from 'firebase/storage';
+import Image from 'next/image'
 
 import ReportC from "../component/report";
+import Modal from '@/component/Modal';
 
 export const Dashboard = () => {
+    const Fragment = React.Fragment;
+    const [images, setImages] = useState<Images[]>([]);
+
+    const storage = getStorage();
+
+    type Images = {
+        images_name: string;
+        timestamp: string;
+    }
+
 
     type Report = {
         psupassport: string;
@@ -27,11 +39,15 @@ export const Dashboard = () => {
 
     useEffect(() => {
 
+        if (user == "") {
+            router.push("/");
+        }
+
         const database = getDatabase(app);
         const countRef = ref(database, 'student_report');
         onValue(countRef, (snapshot) => {
             const data = snapshot.val();
-            console.log(snapshot.size);
+            //console.log(snapshot.size);
             var countPositive = 0;
             var countNegative = 0;
             const ReportList: Report[] = [];
@@ -43,7 +59,7 @@ export const Dashboard = () => {
                     countNegative++;
                 }
                 const childData = child.val();
-                console.log(childData);
+                //console.log(childData);
                 ReportList.push({ ...childData });
             }));
 
@@ -54,13 +70,32 @@ export const Dashboard = () => {
 
         sortData();
 
+        const fetchimages = async () => {
+            for (let index = 0; index < reportList.length; index++) {
+
+                const imagesList: any = [];
+                const imagesName = reportList[index].images_name;
+                const psupassport = reportList[index].psupassport;
+                const timestamp = reportList[index].timestamp;
+
+                const imagesRef = storageRef(storage, `images/${psupassport}/${imagesName}`);
+                getDownloadURL(imagesRef).then((url) => {
+                    //console.log(url);
+                    imagesList.push({ url, timestamp });
+                }).catch((error) => {
+                    console.log(error);
+                });
+
+                setImages(imagesList);
+            }
+        }
+
+        fetchimages();
+
+
 
 
     }, [])
-
-    if (user == "") {
-        router.push("/");
-    }
 
     function sortData() {
         const sortedList = [...reportList].sort((a, b) => {
@@ -70,12 +105,21 @@ export const Dashboard = () => {
     }
 
 
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
+    const openModal = () => setIsModalOpen(true)
+    const closeModal = () => setIsModalOpen(false)
 
 
     return (
+
         <div className="h-screen container px-4 mx-auto font-work_sans">
             <div className="flex flex-col-2 justify-around mt-24">
+                <button onClick={openModal}>Open Modal</button>
+                <Modal isOpen={isModalOpen} onClose={closeModal}>
+                    <h1 className="text-xl font-bold mb-4">Modal Content</h1>
+                    <p>This is the content of the modal.</p>
+                </Modal>
                 <div className=" border border-gray-500 px-2 py-2 rounded-xl  shadow-md">
                     <p className=' font-bold text-sm text-start '>Total Positive</p>
                     <p className=' text-center mt-4 text-green-400 text-2xl font-bold'>{totalPositive}</p>
@@ -119,6 +163,9 @@ export const Dashboard = () => {
                                         <td className='px-6 py-4'>
                                             <button className='bg-blue-500 text-white px-4 py-2 rounded-md'>ATK</button>
                                         </td>
+                                        <td>
+                                            <p>{items.images_name}</p>
+                                        </td>
 
                                     </tr>
                                 ))
@@ -128,10 +175,12 @@ export const Dashboard = () => {
 
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
     )
+
 }
 
 export default Dashboard;
