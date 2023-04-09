@@ -110,16 +110,20 @@ export const Dashboard = () => {
     const openModal = () => setIsModalOpen(true)
     const closeModal = () => setIsModalOpen(false)
 
+    const viewImages = async (psupassport: string, imagesName: string) => {
+        const queryParams = { psupassport, imagesName };
+        const queryString = new URLSearchParams(queryParams).toString();
+        const href = `/ViewImage?${queryString}`;
+
+        await window.open(href, "_blank");
+    }
 
     return (
 
         <div className="h-screen container px-4 mx-auto font-work_sans">
             <div className="flex flex-col-2 justify-around mt-24">
-                <button onClick={openModal}>Open Modal</button>
-                <Modal isOpen={isModalOpen} onClose={closeModal}>
-                    <h1 className="text-xl font-bold mb-4">Modal Content</h1>
-                    <p>This is the content of the modal.</p>
-                </Modal>
+
+
                 <div className=" border border-gray-500 px-2 py-2 rounded-xl  shadow-md">
                     <p className=' font-bold text-sm text-start '>Total Positive</p>
                     <p className=' text-center mt-4 text-green-400 text-2xl font-bold'>{totalPositive}</p>
@@ -161,11 +165,9 @@ export const Dashboard = () => {
                                             {items.status}
                                         </td>
                                         <td className='px-6 py-4'>
-                                            <button className='bg-blue-500 text-white px-4 py-2 rounded-md'>ATK</button>
+                                            <button onClick={async () => await viewImages(items.psupassport, items.images_name)} className='bg-blue-500 text-white px-4 py-2 rounded-md'>ATK</button>
                                         </td>
-                                        <td>
-                                            <p>{items.images_name}</p>
-                                        </td>
+
 
                                     </tr>
                                 ))
