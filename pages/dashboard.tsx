@@ -177,7 +177,7 @@ export const Dashboard = () => {
 
                     {
                         reportList.map((items, index) => (
-                            <div className="mb-4 w-full flex justify-between px-4 py-4 bg-white rounded-lg shadow-sm drop-shadow-sm sm:hidden">
+                            <div key={index} className="mb-4 w-full flex justify-between px-4 py-4 bg-white rounded-lg shadow-sm drop-shadow-sm sm:hidden">
                                 <div className=""><p>{items.psupassport}</p></div>
                                 <div className=""><p>{items.timestamp}</p></div>
                                 <div className=" text-indigo-500 font-bold"><p onClick={async () => await viewImages(items.psupassport, items.images_name)} >View</p></div>
