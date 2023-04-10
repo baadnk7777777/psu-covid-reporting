@@ -119,11 +119,8 @@ export const Dashboard = () => {
     }
 
     return (
-
         <div className="h-screen container px-4 mx-auto font-work_sans">
             <div className="flex flex-col-2 justify-around mt-24">
-
-
                 <div className=" border border-gray-500 px-2 py-2 rounded-xl  shadow-md">
                     <p className=' font-bold text-sm text-start '>Total Positive</p>
                     <p className=' text-center mt-4 text-green-400 text-2xl font-bold'>{totalPositive}</p>
@@ -136,8 +133,8 @@ export const Dashboard = () => {
                 </div>
             </div>
             <div className="mt-24">
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className='w-full text-sm text-center'>
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg  ">
+                    <table className='w-full text-sm text-center hidden sm:inline-table'>
                         <thead className=' uppercase bg-[#009CDE] text-white'>
                             <th scope='col' className='px-6 py-3'>
                                 Date
@@ -177,6 +174,29 @@ export const Dashboard = () => {
 
                         </tbody>
                     </table>
+
+
+
+                    <div className=" w-full text-sm text-center sm:hidden">
+                        {
+                            reportList.map((items, index) => (
+                                <><div className="flex flex-col justify-center items-center mt-4">
+                                    <p className='w-1/2 bg-blue-500 text-white text-md font-bold rounded-md'>DATE</p>
+                                    <p className=' text-md my-2'>{items.timestamp}</p>
+                                </div><div className="flex flex-col justify-center items-center">
+                                        <p className='w-1/2 bg-blue-500 text-white text-md font-bold rounded-md'>STUDENT ID</p>
+                                        <p className=' text-md my-2'> {items.psupassport}</p>
+                                    </div><div className="flex flex-col justify-center items-center">
+                                        <p className='w-1/2 bg-blue-500 text-white text-md font-bold rounded-md'>COVID STATUS</p>
+                                        <p className=' text-md my-2'>{items.status}</p>
+                                    </div><div className="flex flex-col justify-center items-center">
+                                        <p className='w-1/2 bg-blue-500 text-white text-md font-bold rounded-md'>VIEW</p>
+                                        <button onClick={async () => await viewImages(items.psupassport, items.images_name)} className='bg-blue-500 text-white px-4 py-2 rounded-md mt-4'>ATK</button>
+                                    </div></>
+                            ))
+                        }
+
+                    </div>
 
                 </div>
             </div>

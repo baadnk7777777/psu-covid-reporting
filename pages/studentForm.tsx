@@ -13,6 +13,7 @@ export const StudentForm = () => {
     const [imagesFile, setImagesFile] = useState<File>();
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [covidStatus, setCovidStatus] = useState("");
+    const [isShow, setIsShow] = useState(false);
 
     const router = useRouter();
 
@@ -105,12 +106,12 @@ export const StudentForm = () => {
 
 
     useEffect(() => {
-
+        if (user == "") {
+            router.push("/");
+        }
     })
 
-    if (user == "") {
-        router.push("/");
-    }
+
 
     const handleDashboard = () => {
 

@@ -12,7 +12,9 @@ export default function Home() {
   return (
 
     <div className=" h-screen flex justify-center items-center container px-4 mx-auto">
-      <LoginForm />
+      <div className="w-full">
+        <LoginForm />
+      </div>
 
     </div >
   )

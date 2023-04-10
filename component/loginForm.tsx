@@ -4,6 +4,7 @@ import { Router, useRouter } from 'next/router'
 import Image from 'next/image'
 import { getDatabase, onValue, ref } from 'firebase/database'
 import app from '@/utils/firebase'
+import covid from '../public/images/covid.jpg'
 
 export const LoginForm = () => {
 
@@ -56,13 +57,15 @@ export const LoginForm = () => {
     const router = useRouter();
     return (
 
-        <div className="flex flex-col-2 w-full rounded-2xl border border-2-black ">
+        <div className="flex flex-col-2 w-full rounded-2xl border border-2-black">
 
-            <div className=" bg-[#009CDE] w-1/2 rounded-l-2xl"></div>
+            <div className=" flex justify-center w-1/2 sm:w-1/4 rounded-l-2xl">
+                <Image src={covid} alt='' width={500} />
+            </div>
 
-            <div className="px-10 py-10 flex flex-col w-1/2 justify-center items-center ">
+            <div className="px-10 py-10 flex flex-col w-1/2 justify-center items-center bg-green-500 ">
                 <div className="">
-                    <Image className='' width={160} src={psu_logo} alt="Logo" />
+                    <Image className=' object-none' width={160} src={psu_logo} alt="Logo" />
                 </div>
 
                 <div className="w-ful items-center">
@@ -72,11 +75,11 @@ export const LoginForm = () => {
 
                 <input onChange={(e) => setPsuPassport(e.target.value)} type="text" className='  w-1/2 font-work_sans font-semibold px-2 py-2 border border-gray-200 rounded-lg' placeholder='PSU Passport Account Name: ' />
                 <input onChange={(e) => setPassword(e.target.value
-                )} type="password" className=' mt-4  w-1/2 font-work_sans font-semibold px-2 py-2 border border-gray-200 rounded-lg' placeholder='Password' />
+                )} type="password" className=' mt-4  w-1/2 font-work_sans font-semibold px-2 py-2 border border-gray-200 rounded-lg ' placeholder='Password' />
 
 
 
-                <button onClick={() => handleSubmit()} className='mt-4 font-work_sans font-bold bg-[#009CDE] px-2 py-3 rounded-2xl text-white w-1/2'>LOGIN</button>
+                <button onClick={() => handleSubmit()} className='mt-4 font-work_sans font-bold bg-[#009CDE] sm:bg-red-400 px-2 py-3 rounded-2xl text-white w-1/2'>LOGIN</button>
 
 
 
