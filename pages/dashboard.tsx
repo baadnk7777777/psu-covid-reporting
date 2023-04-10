@@ -133,7 +133,7 @@ export const Dashboard = () => {
                 </div>
             </div>
             <div className="mt-24">
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg  ">
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-[#f5f6fb] px-4 py-5">
                     <table className='w-full text-sm text-center hidden sm:inline-table'>
                         <thead className=' uppercase bg-[#009CDE] text-white'>
                             <th scope='col' className='px-6 py-3'>
@@ -175,9 +175,23 @@ export const Dashboard = () => {
                         </tbody>
                     </table>
 
+                    {
+                        reportList.map((items, index) => (
+                            <div className="mb-4 w-full flex justify-between px-4 py-4 bg-white rounded-lg shadow-sm drop-shadow-sm sm:hidden">
+                                <div className=""><p>{items.psupassport}</p></div>
+                                <div className=""><p>{items.timestamp}</p></div>
+                                <div className=" text-indigo-500 font-bold"><p onClick={async () => await viewImages(items.psupassport, items.images_name)} >View</p></div>
+                            </div>
+                        ))
+                    }
 
 
-                    <div className=" w-full text-sm text-center sm:hidden">
+
+
+
+
+
+                    {/* <div className=" w-full text-sm text-center sm:hidden">
                         {
                             reportList.map((items, index) => (
                                 <><div className="flex flex-col justify-center items-center mt-4">
@@ -196,7 +210,7 @@ export const Dashboard = () => {
                             ))
                         }
 
-                    </div>
+                    </div> */}
 
                 </div>
             </div>

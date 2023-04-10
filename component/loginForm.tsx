@@ -56,8 +56,8 @@ export const LoginForm = () => {
     }
     const router = useRouter();
     return (
-
-        <div className="flex flex-col-2 w-full rounded-2xl border border-2-black">
+        //flex flex-col-2 w-full rounded-2xl border border-2-black
+        <div className="flex flex-col-2 m-auto bg-slate-50 rounded-md ">
 
             <div className=" flex justify-center w-1/2 sm:w-1/4 rounded-l-2xl">
                 <Image src={covid} alt='' width={500} />
