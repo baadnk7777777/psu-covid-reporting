@@ -79,7 +79,7 @@ export const LoginForm = () => {
 
 
 
-                <button onClick={() => handleSubmit()} className='mt-4 font-work_sans font-bold bg-red-500 sm:bg-red-400 px-2 py-3 rounded-2xl text-white w-1/2'>LOGIN</button>
+                <button onClick={() => handleSubmit()} className='mt-4 font-work_sans font-bold  px-2 py-3 rounded-2xl  w-1/2'>LOGIN</button>
 
 
 
