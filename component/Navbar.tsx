@@ -38,9 +38,6 @@ function Navbar() {
     useEffect(() => {
         const userFromStorage = sessionStorage.getItem('user');
         console.log(userFromStorage);
-
-        console.log(user?.email);
-
         if (userFromStorage) {
             setIsShow(true);
         }
