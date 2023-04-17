@@ -7,8 +7,15 @@ import Image from 'next/image'
 
 import ReportC from "../component/report";
 import Modal from '@/component/Modal';
+import { getApps } from 'firebase/app';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { getAuth } from 'firebase/auth';
 
 export const Dashboard = () => {
+    const router = useRouter();
+    const auth = getAuth();
+    const [user, loading] = useAuthState(auth);
+
     const Fragment = React.Fragment;
     const [images, setImages] = useState<Images[]>([]);
 
@@ -31,17 +38,11 @@ export const Dashboard = () => {
     const [totalPositive, setPositive] = useState("");
     const [totalNegative, setTotalNegative] = useState("");
 
-    const router = useRouter();
-
-    const user = router.query.user;
-    const role = router.query.role;
-
-
     useEffect(() => {
 
-        if (user == "") {
-            router.push("/");
-        }
+        // if (user == "") {
+        //     router.push("/");
+        // }
 
         const database = getDatabase(app);
         const countRef = ref(database, 'student_report');
@@ -66,36 +67,23 @@ export const Dashboard = () => {
             setPositive(countPositive.toString());
             setTotalNegative(countNegative.toString());
             setReportList(ReportList);
+
+            // Fetch images after reportList is updated
+            //fetchimages(ReportList);
         });
 
         sortData();
 
-        const fetchimages = async () => {
-            for (let index = 0; index < reportList.length; index++) {
+    }, []);
 
-                const imagesList: any = [];
-                const imagesName = reportList[index].images_name;
-                const psupassport = reportList[index].psupassport;
-                const timestamp = reportList[index].timestamp;
+    if(loading){
+        return <h1>Loading...</h1>
+    }
 
-                const imagesRef = storageRef(storage, `images/${psupassport}/${imagesName}`);
-                getDownloadURL(imagesRef).then((url) => {
-                    //console.log(url);
-                    imagesList.push({ url, timestamp });
-                }).catch((error) => {
-                    console.log(error);
-                });
-
-                setImages(imagesList);
-            }
-        }
-
-        fetchimages();
-
-
-
-
-    }, [])
+    if(!user) {
+        router.push("/");
+        return <div className="">Please sign In to continue ...</div>
+    }
 
     function sortData() {
         const sortedList = [...reportList].sort((a, b) => {
@@ -103,12 +91,6 @@ export const Dashboard = () => {
         });
         setReportList(sortedList);
     }
-
-
-    const [isModalOpen, setIsModalOpen] = useState(false)
-
-    const openModal = () => setIsModalOpen(true)
-    const closeModal = () => setIsModalOpen(false)
 
     const viewImages = async (psupassport: string, imagesName: string) => {
         const queryParams = { psupassport, imagesName };

@@ -8,6 +8,9 @@ import firebase from 'firebase/app';
 import { getDatabase, set, ref as databaseRef, ref, push } from "firebase/database";
 import app from '@/utils/firebase';
 import { useRouter } from 'next/router';
+import { initFirebase } from '@/utils/firebaseApp';
+import { getAuth } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export const StudentForm = () => {
     const [imagesFile, setImagesFile] = useState<File>();
@@ -16,13 +19,16 @@ export const StudentForm = () => {
     const [isShow, setIsShow] = useState(false);
 
     const router = useRouter();
+    initFirebase();
+    const auth = getAuth();
+    const [user, loading] = useAuthState(auth); 
 
-    const user = router.query.psuPassport;
-    const role = router.query.role;
+    const [submitStatus, setSubmitStatus] = useState(false);
+    const [submitDetail, setSubmitDetail] = useState("Working...");
 
 
     const handleSelectFile = (file: any) => {
-        if (file[0].size < 1000000) {
+        if (file[0].size < 10000000) {
             setImagesFile(file[0]);
             console.log(file[0]);
         } else {
@@ -60,13 +66,13 @@ export const StudentForm = () => {
                 status: covidStatus,
                 images_name: imagesFile.name,
                 timestamp: formattedDate,
-                psupassport: user,
+                psupassport: user?.email,
             });
 
             console.log("Create Report Working function.")
 
             const name = imagesFile.name;
-            const storeRef = storageRef(storage, `images/${user}/${name}`);
+            const storeRef = storageRef(storage, `images/${user?.email}/${name}`);
             const uploadTask = uploadBytesResumable(storeRef, imagesFile);
 
             uploadTask.on('state_changed',
@@ -95,65 +101,67 @@ export const StudentForm = () => {
                 }
             )
 
-
-
+            setSubmitDetail("Success");
+            setSubmitStatus(true);
 
         } else {
             console.log("File not found!!!");
+            setSubmitDetail("File not found!!!");
+            setSubmitStatus(true);
         }
+    }
+
+    if(loading){
+        return <h1>Loading...</h1>
+    }
+
+    if(!user) {
+        router.push("/");
+        return <div className="">Please sign In to continue ...</div>
     }
 
 
 
-    useEffect(() => {
-        if (user == "") {
-            router.push("/");
-        }
-    })
 
 
 
-    const handleDashboard = () => {
-
-        router.push({
-            pathname: '/dashboard',
-            query: { user, role }
-        });
-
-    }
 
     return (
-        <div className=" h-screen flex justify-center items-center container px-4 mx-auto w-full">
+        <div className=" h-screen flex flex-col justify-center items-center container px-4 mx-auto w-full">
+            {!submitStatus && 
             <div className="rounded-2xl border border-2-black w-1/2 px-4 py-4 shadow-lg">
-                <div className="w-full">
-                    <DatePicker placeholderText='Choose Date' className=' w-full font-work_sans px-2 py-2  border border-gray-300 text-gray-900  rounded-lg'
-                        selected={selectedDate}
-                        onChange={(date: Date | null) => setSelectedDate(date)}
-                    />
-                </div>
-
-                <div className="mt-4 ">
-
-                    <select onChange={(event) => setCovidStatus(event.target.value)} className=' font-work_sans px-2 py-2  border border-gray-300 text-gray-900  rounded-lg w-full' id="">
-                        <option className='font-work_sans' value="">Choose a covid status</option>
-                        <option value="Positive">Positive</option>
-                        <option value="Negative">Negative</option>
-                    </select>
-                </div>
-                <div className=" px-4 py-5 text-center w-full">
-                    <label htmlFor="dropzone-file" className='flex flex-col items-center justify-center h-40 border-2 border-white border-dashed rounded-lg cursor-pointer bg-[#009CDE]'>
-                        <div className="flex flex-col">
-                            <p className=' font-work_sans font-bold mb-4 text-white'>{(imagesFile && imagesFile.name) ? imagesFile && imagesFile.name : "Click to upload"}</p>
-                        </div>
-                    </label>
-                    <input id="dropzone-file" type="file" className="hidden"
-                        onChange={(files) => handleSelectFile(files.target.files)}
-                    />
-                </div>
-                <button className='font-work_sans bg-[#009CDE] px-2 py-3 text-white font-bold rounded-2xl w-full'
-                    onClick={handleUploadFile}
-                >Submit</button>
+            <div className="w-full">
+                <DatePicker placeholderText='Choose Date' className=' w-full font-work_sans px-2 py-2  border border-gray-300 text-gray-900  rounded-lg'
+                    selected={selectedDate}
+                    onChange={(date: Date | null) => setSelectedDate(date)}
+                />
             </div>
+
+            <div className="mt-4 ">
+
+                <select onChange={(event) => setCovidStatus(event.target.value)} className=' font-work_sans px-2 py-2  border border-gray-300 text-gray-900  rounded-lg w-full' id="">
+                    <option className='font-work_sans' value="">Choose a covid status</option>
+                    <option value="Positive">Positive</option>
+                    <option value="Negative">Negative</option>
+                </select>
+            </div>
+            <div className=" px-4 py-5 text-center w-full">
+                <label htmlFor="dropzone-file" className='flex flex-col items-center justify-center h-40 border-2 border-white border-dashed rounded-lg cursor-pointer bg-[#009CDE]'>
+                    <div className="flex flex-col">
+                        <p className=' font-work_sans font-bold mb-4 text-white'>{(imagesFile && imagesFile.name) ? imagesFile && imagesFile.name : "Click to upload"}</p>
+                    </div>
+                </label>
+                <input id="dropzone-file" type="file" className="hidden"
+                    onChange={(files) => handleSelectFile(files.target.files)}
+                />
+            </div>
+            <button className='font-work_sans bg-[#009CDE] px-2 py-3 text-white font-bold rounded-2xl w-full'
+                onClick={handleUploadFile}
+            >Submit</button>
+        </div>
+            }
+
+            {submitStatus && <div className=" font-work_sans font-bold text-lg mt-10">{submitDetail}</div>}
 
         </div>
     )

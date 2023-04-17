@@ -7,8 +7,7 @@ import LoginForm from '../component/loginForm'
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-
-
+  
   return (
 
     <div className=" h-screen flex justify-center items-center container px-4 mx-auto">

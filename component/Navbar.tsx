@@ -5,6 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import psu_logo from '../public/images/PSU_CoC_ENG.png'
+import { getAuth } from 'firebase/auth'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 type NavLink = {
     label: string;
@@ -24,14 +26,26 @@ const dashboardLinks: NavLink[] = [
 ];
 
 function Navbar() {
-
-
-
     const router = useRouter();
-    const user = router.query.psuPassport;
-    const role = router.query.role;
-
+    const app = getAuth();
+    const [user, loading] = useAuthState(app);
     const [isShow, setIsShow] = useState(false);
+
+    const [userDisplay, setuserDisplay] = useState("");
+
+    
+
+    useEffect(() => {
+        const userFromStorage = sessionStorage.getItem('user');
+        console.log(userFromStorage);
+
+        console.log(user?.email);
+
+        if (userFromStorage) {
+            setIsShow(true);
+        }
+
+    }, []);
 
 
     const hanndleLink = () => {
@@ -39,30 +53,44 @@ function Navbar() {
     }
 
     const handleDashboard = () => {
-
-        router.push({
-            pathname: '/dashboard',
-            query: { user, role }
-        });
-
+        router.push('/dashboard');
     }
 
-    useEffect(() => {
-        if (user) {
-            setIsShow(true);
-        }
-    }, []);
+    const handleReporting = () => {
+        router.push('/studentForm');
+    }
+
+    const handleLogout = async () => {
+        await app.signOut();
+    }
+
+    
 
     return (
 
         <div className="flex   px-2 py-3 bg-[#009CDE] justify-around font-work_sans font-bold text-white shadow-md drop-shadow-md">
             <div className="flex justify-start">
-                <p>PSU COVID REPORTING</p>
+                <p onClick={()=> {router.push("/dashboard")}} >PSU COVID REPORTING {userDisplay}</p>
             </div>
-            {!isShow &&
+            {isShow &&
                 <div className="flex justify-end">
                     <a onClick={() => handleDashboard()} className="text-gray-400 cursor-not-allowed">Dashboard</a>
                 </div>
+
+            }
+
+{isShow &&
+                <div className="flex justify-end">
+                    <a onClick={() => handleReporting()} className="text-gray-400 cursor-not-allowed">Reporting</a>
+                </div>
+
+            }
+
+            {isShow &&
+                <div className="flex justify-end">
+                    <a onClick={() => handleLogout()} className="text-gray-400 cursor-not-allowed">Logout</a>
+                </div>
+
             }
         </div>
     )
