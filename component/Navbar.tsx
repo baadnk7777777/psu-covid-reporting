@@ -69,21 +69,21 @@ function Navbar() {
             <div className="flex justify-start">
                 <p onClick={()=> {router.push("/dashboard")}} >PSU COVID REPORTING {userDisplay}</p>
             </div>
-            {isShow &&
+            {user &&
                 <div className="flex justify-end">
                     <a onClick={() => handleDashboard()} className="text-gray-400 cursor-not-allowed">Dashboard</a>
                 </div>
 
             }
 
-{isShow &&
+{user &&
                 <div className="flex justify-end">
                     <a onClick={() => handleReporting()} className="text-gray-400 cursor-not-allowed">Reporting</a>
                 </div>
 
             }
 
-            {isShow &&
+            {user &&
                 <div className="flex justify-end">
                     <a onClick={() => handleLogout()} className="text-gray-400 cursor-not-allowed">Logout</a>
                 </div>
