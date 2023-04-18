@@ -11,6 +11,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPasswor
 import { FcGoogle } from "react-icons/fc";
 
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { Alert, TextField } from '@mui/material'
 
 export const LoginForm = () => {
     const router = useRouter();
@@ -23,14 +24,30 @@ export const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const [alert, setAlert] = useState(false);
+    const [alertContent, setAlertContent] = useState('');
+
     const signIn = async () => {
-        const result = await signInWithPopup(auth, provider);
-        console.log(result.user);
+        try {
+            const result = await signInWithPopup(auth, provider);
+            setAlert(false);
+        } catch (error) {
+            setAlert(true);
+            setAlertContent("Email or Password is incorrect");
+        }
+        // console.log(result.user);
     };
 
     const signWithEmail = async () => {
-        const result = await signInWithEmailAndPassword(auth, email, password);
-        console.log(result.user);
+        try {
+            const result = await signInWithEmailAndPassword(auth, email, password);
+            setAlert(false);
+        } catch (error) {
+
+            setAlert(true);
+            setAlertContent("Email or Password is incorrect");
+        }
+        // console.log(result.user);
     }
 
     if (loading) {
@@ -49,6 +66,8 @@ export const LoginForm = () => {
                 <Image className=' rounded-md' src={covid} alt='' width={500} />
             </div>
 
+
+
             <div className="mb-4 px-10 py-10 flex flex-col w-1/2 justify-center items-center">
                 <div className="">
                     <Image className=' object-none' width={160} src={psu_logo} alt="Logo" />
@@ -61,12 +80,23 @@ export const LoginForm = () => {
                 </div>
 
 
-                <input onChange={(e) => setEmail(e.target.value)} type="text" className='  w-1/2 font-work_sans font-semibold px-2 py-2 border border-gray-200 rounded-lg' placeholder='PSU Passport Account Name: ' />
+                {/* <input onChange={(e) => setEmail(e.target.value)} type="text" className='  w-1/2 font-work_sans font-semibold px-2 py-2 border border-gray-200 rounded-lg' placeholder='PSU Passport Account Name: ' />
                 <input onChange={(e) => setPassword(e.target.value
-                )} type="password" className=' mt-4  w-1/2 font-work_sans font-semibold px-2 py-2 border border-gray-200 rounded-lg ' placeholder='Password' />
+                )} type="password" className=' mt-4  w-1/2 font-work_sans font-semibold px-2 py-2 border border-gray-200 rounded-lg ' placeholder='Password' /> */}
 
+                <div className="mt-4  w-full flex flex-col justify-center items-center">
+                    <TextField onChange={(e) => setEmail(e.target.value)} id="outlined-basic" label="PSU email" variant="outlined" className='w-1/2 rounded-lg' placeholder='s**********@phuket.psu.ac.th' />
+                </div>
+                <div className="mt-4 w-full flex flex-col justify-center items-center">
+                    <TextField onChange={(e) => setPassword(e.target.value
+                    )} type="password" id="outlined-basic" label="Password" variant="outlined" className=' w-1/2 rounded-lg  mt-4' />
+                </div>
 
-                <button onClick={()=> {signWithEmail()}} className='mt-4 mb-4 font-work_sans font-bold  px-2 py-3 rounded-2xl  w-1/2 bg-[#009CDE] text-white'>LOGIN</button>
+                {alert && <div className="mt-4 w-full flex flex-col justify-center items-center">
+                    <Alert severity="error" className='w-1/2'>{alertContent}</Alert>
+                </div>}
+
+                <button onClick={() => { signWithEmail() }} className='mt-4 mb-4 font-work_sans font-bold  px-2 py-3 rounded-2xl  w-1/2 bg-[#009CDE] text-white'>LOGIN</button>
                 <button onClick={signIn}> <FcGoogle size={30} /> </button>
 
 
