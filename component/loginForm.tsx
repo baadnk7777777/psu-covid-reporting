@@ -29,7 +29,7 @@ export const LoginForm = () => {
 
     const signIn = async () => {
         try {
-            const result = await signInWithPopup(auth, provider);
+            await signInWithPopup(auth, provider);
             setAlert(false);
         } catch (error) {
             setAlert(true);
